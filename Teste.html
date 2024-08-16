@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Código de Barras</title>
+</head>
+<body>
+    <h2>Teste de Código de Barras</h2>
+    <svg id="barcode"></svg>
+
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            JsBarcode("#barcode", "123456789012", {
+                format: "CODE128",
+                width: 2,
+                height: 100,
+                displayValue: true
+            });
+        });
+    </script>
+</body>
+</html>

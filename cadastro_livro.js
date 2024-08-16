@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
             height: 100,
             displayValue: true
         });
-
+        localStorage.removeItem('books');
         alert('Livro cadastrado com sucesso!');
     });
 });

@@ -40,9 +40,7 @@
                 const list = document.createElement('ul');
                 books.forEach(function(book) {
                     const listItem = document.createElement('li');
-                    listItem.textContent = `Título: ${book.title}, Autor: ${book.author};
-                        
-                        ;
+                    listItem.textContent = `Título: ${book.title}, Autor: ${book.author}, ISBN: ${book.isbn}`;
                     list.appendChild(listItem);
                 });
                 bookListDiv.appendChild(list);

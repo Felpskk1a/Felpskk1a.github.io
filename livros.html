@@ -1,4 +1,3 @@
-<!-- base.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -15,34 +14,38 @@
                 <li><a href="index.html">Início</a></li>
                 <li><a href="sobre.html">Sobre</a></li>
                 <li><a href="contato.html">Contato</a></li>
-                <li><a href="login.html" class="login-button">Login</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="cadastro_livro.html">Cadastrar Livro</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
         <h2>Livros Disponíveis</h2>
-        <section class="livros-lista">
-            <article class="livro-item">
-                <img src="caminho_para_capa_livro1.jpg" alt="Capa do Livro 1">
-                <h3><a href="livro.html">Título do Livro 1</a></h3>
-                <p><strong>Autor:</strong> Nome do Autor 1</p>
-                <p><strong>Gênero:</strong> Gênero 1</p>
-            </article>
-
-            <article class="livro-item">
-                <img src="caminho_para_capa_livro2.jpg" alt="Capa do Livro 2">
-                <h3><a href="livro2.html">Título do Livro 2</a></h3>
-                <p><strong>Autor:</strong> Nome do Autor 2</p>
-                <p><strong>Gênero:</strong> Gênero 2</p>
-            </article>
-
-            <!-- Repita a estrutura acima para outros livros -->
-        </section>
+        <div id="bookList"></div>
     </main>
 
     <footer>
         <p>© 2024 Meu Site</p>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const bookListDiv = document.getElementById('bookList');
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+
+            if (books.length === 0) {
+                bookListDiv.innerHTML = '<p>Nenhum livro cadastrado ainda.</p>';
+            } else {
+                const list = document.createElement('ul');
+                books.forEach(function(book) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `Título: ${book.title}, Autor: ${book.author}, ISBN: ${book.isbn}`;
+                    list.appendChild(listItem);
+                });
+                bookListDiv.appendChild(list);
+            }
+        });
+    </script>
 </body>
 </html>

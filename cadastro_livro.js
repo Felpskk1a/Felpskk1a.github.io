@@ -1,34 +1,29 @@
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('bookForm').addEventListener('submit', function(event) {
-        event.preventDefault();
+// cadastro_livro.js
 
-        const title = document.getElementById('title').value;
-        const author = document.getElementById('author').value;
-        const isbn = document.getElementById('isbn').value;
+document.getElementById('fetchBookInfo').addEventListener('click', function() {
+    const isbn = document.getElementById('barcodeInput').value;
 
-        if (isbn.trim() === '') {
-            alert('Por favor, insira um ISBN.');
-            return;
-        }
+    if (isbn.trim() === '') {
+        alert('Por favor, insira um código de barras.');
+        return;
+    }
 
-        // Salvar o livro no Local Storage
-        const books = JSON.parse(localStorage.getItem('books')) || [];
-        books.push({ title, author, isbn });
-        localStorage.setItem('books', JSON.stringify(books));
-
-        // Limpar os campos do formulário
-        document.getElementById('title').value = '';
-        document.getElementById('author').value = '';
-        document.getElementById('isbn').value = '';
-
-        // Gerar código de barras
-        document.getElementById('barcode').innerHTML = '';
-        JsBarcode("#barcode", isbn, {
-            format: "CODE128",
-            width: 2,
-            height: 100,
-            displayValue: true
+    fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.totalItems > 0) {
+                const book = data.items[0].volumeInfo;
+                document.getElementById('title').value = book.title;
+                document.getElementById('author').value = book.authors ? book.authors.join(', ') : '';
+                document.getElementById('isbn').value = isbn;
+            } else {
+                alert('Livro não encontrado.');
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao buscar informações do livro:', error);
+            alert('Erro ao buscar informações do livro.');
         });
-        alert('Livro cadastrado com sucesso!');
-    });
 });
+
+// Resto do código para registro do livro

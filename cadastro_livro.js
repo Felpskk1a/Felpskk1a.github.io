@@ -34,13 +34,14 @@ document.getElementById('fetchBookInfo').addEventListener('click', function() {
         return;
     }
 
-    fetch(`https://api2.isbndb.com/book/9780140328721`)
+    fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`)
         .then(response => response.json())
         .then(data => {
-            if (data.totalItems > 0) {
-                const book = data.items[0].volumeInfo;
+            const key = `ISBN:${isbn}`;
+            if (data[key]) {
+                const book = data[key];
                 document.getElementById('title').value = book.title || '';
-                document.getElementById('author').value = book.authors ? book.authors.join(', ') : '';
+                document.getElementById('author').value = book.authors ? book.authors.map(author => author.name).join(', ') : '';
                 document.getElementById('isbn').value = isbn;
             } else {
                 alert('Livro não encontrado.');

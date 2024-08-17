@@ -1,3 +1,4 @@
+<!-- livros.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -22,7 +23,9 @@
 
     <main>
         <h2>Livros Disponíveis</h2>
-        <div id="bookList"></div>
+        <div id="bookList">
+            <!-- Os livros serão carregados aqui -->
+        </div>
     </main>
 
     <footer>
@@ -31,19 +34,21 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const bookListDiv = document.getElementById('bookList');
-            const books = JSON.parse(localStorage.getItem('books')) || [];
+            // Obter os livros do localStorage
+            let books = JSON.parse(localStorage.getItem('books')) || [];
+
+            // Pegar o elemento onde os livros serão exibidos
+            const bookList = document.getElementById('bookList');
 
             if (books.length === 0) {
-                bookListDiv.innerHTML = '<p>Nenhum livro cadastrado ainda.</p>';
+                bookList.innerHTML = '<p>Nenhum livro registrado ainda.</p>';
             } else {
-                const list = document.createElement('ul');
                 books.forEach(function(book) {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = `Título: ${book.title}, Autor: ${book.author}, ISBN: ${book.isbn}`;
-                    list.appendChild(listItem);
+                    // Criar um elemento de parágrafo para cada livro
+                    const bookItem = document.createElement('p');
+                    bookItem.textContent = `Título: ${book.title} | Autor: ${book.author} | ISBN: ${book.isbn}`;
+                    bookList.appendChild(bookItem);
                 });
-                bookListDiv.appendChild(list);
             }
         });
     </script>

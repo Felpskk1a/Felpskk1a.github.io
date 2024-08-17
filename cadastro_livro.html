@@ -1,3 +1,4 @@
+<!-- cadastro_livro.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -22,7 +23,13 @@
 
     <main>
         <h2>Cadastro de Livro</h2>
+        <div id="interactive" class="viewport"></div> <!-- Área onde a câmera será ativada -->
         <form id="bookForm">
+            <div class="form-group">
+                <label for="barcodeInput">Código de Barras:</label>
+                <input type="text" id="barcodeInput" name="barcodeInput" required>
+                <button type="button" id="fetchBookInfo">Buscar Informações</button>
+            </div>
             <div class="form-group">
                 <label for="title">Título:</label>
                 <input type="text" id="title" name="title" required>
@@ -35,19 +42,42 @@
                 <label for="isbn">ISBN:</label>
                 <input type="text" id="isbn" name="isbn" required>
             </div>
-            <button type="submit">Gerar Código de Barras</button>
+            <button type="submit">Registrar Livro</button>
         </form>
-        <div id="barcodeContainer" style="margin-top: 20px;">
-            <p id="barcodeLabel">Código de Barras:</p>
-            <svg id="barcode"></svg>
-        </div>
     </main>
 
     <footer>
         <p>© 2024 Meu Site</p>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
-    <script src="cadastro_livro.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quagga/dist/quagga.min.js"></script>
+    <script>
+        // Configuração do QuaggaJS
+        Quagga.init({
+            inputStream : {
+                name : "Live",
+                type : "LiveStream",
+                target: document.querySelector('#interactive')    // Área onde o vídeo será exibido
+            },
+            decoder : {
+                readers : ["ean_reader"] // Padrão de código de barras comum para ISBN (EAN-13)
+            }
+        }, function(err) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log("QuaggaJS initialized");
+            Quagga.start();
+        });
+
+        // Captura o código de barras lido e coloca no campo de texto
+        Quagga.onDetected(function(result) {
+            const code = result.codeResult.code;
+            document.getElementById('barcodeInput').value = code;
+            Quagga.stop(); // Parar a leitura após capturar o código
+        });
+    </script>
 </body>
 </html>
+

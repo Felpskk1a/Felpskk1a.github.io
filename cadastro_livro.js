@@ -34,7 +34,7 @@ document.getElementById('fetchBookInfo').addEventListener('click', function() {
         return;
     }
 
-    fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
+    fetch(`https://api2.isbndb.com/book/9780140328721`)
         .then(response => response.json())
         .then(data => {
             if (data.totalItems > 0) {

@@ -8,7 +8,14 @@ Quagga.init({
         target: document.querySelector('#interactive')    // Área onde o vídeo será exibido
     },
     decoder : {
-        readers : ["ean_reader"] // Padrão de código de barras comum para ISBN (EAN-13)
+        readers : [
+            "ean_reader",          // EAN-13
+            "ean_8_reader",        // EAN-8
+            "upc_reader",          // UPC-A
+            "code_128_reader",     // Código 128
+            "code_39_reader",      // Código 39
+            "codabar_reader"       // Codabar
+        ]
     }
 }, function(err) {
     if (err) {

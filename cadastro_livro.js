@@ -34,17 +34,56 @@ document.getElementById('fetchBookInfo').addEventListener('click', function() {
         return;
     }
 
-    fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`)
-        .then(response => response.json())
-        .then(data => {
-            const key = `ISBN:${isbn}`;
-            if (data[key]) {
-                const book = data[key];
-                document.getElementById('title').value = book.title || '';
-                document.getElementById('author').value = book.authors ? book.authors.map(author => author.name).join(', ') : '';
+    // Função para buscar dados da Open Library
+    function fetchFromOpenLibrary() {
+        return fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`)
+            .then(response => response.json())
+            .then(data => {
+                const key = `ISBN:${isbn}`;
+                if (data[key]) {
+                    return {
+                        title: data[key].title || '',
+                        author: data[key].authors ? data[key].authors.map(author => author.name).join(', ') : ''
+                    };
+                }
+                return null;
+            });
+    }
+
+    // Função para buscar dados da Google Books
+    function fetchFromGoogleBooks() {
+        return fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.items && data.items.length > 0) {
+                    const book = data.items[0].volumeInfo;
+                    return {
+                        title: book.title || '',
+                        author: book.authors ? book.authors.join(', ') : ''
+                    };
+                }
+                return null;
+            });
+    }
+
+    // Tenta buscar as informações em Open Library e, se não encontrar, tenta Google Books
+    fetchFromOpenLibrary()
+        .then(result => {
+            if (result) {
+                document.getElementById('title').value = result.title;
+                document.getElementById('author').value = result.author;
                 document.getElementById('isbn').value = isbn;
             } else {
-                alert('Livro não encontrado.');
+                return fetchFromGoogleBooks();
+            }
+        })
+        .then(result => {
+            if (result) {
+                document.getElementById('title').value = result.title;
+                document.getElementById('author').value = result.author;
+                document.getElementById('isbn').value = isbn;
+            } else {
+                alert('Livro não encontrado em ambas as fontes.');
             }
         })
         .catch(error => {

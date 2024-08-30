@@ -7,8 +7,8 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     const password = document.getElementById('password').value;
 
     // Usuário e senha fixos para demonstração
-    const validUsername = 'usuario';
-    const validPassword = 'senha123';
+    const validUsername = '000112245856';
+    const validPassword = 'Cardeal2023@';
 
     // Usuário e senha para administrador, para demontração
     const adminUsername = 'admin123';
